@@ -29,6 +29,20 @@
           </section>
 
           <form class="card card-body mb-3" method="post" action="/" @submit.prevent="submit()" novalidate>
+            <pre><code>dateBasic: {{ form.date }}<br/>dateAsArray: {{ form.dateAsArray }}</code></pre>
+            <wrapped-flat-pickr
+              label="Select date (wrapped date)"
+              v-model="form.date"
+              @input="test"
+              :config="configs.basic"
+            />
+
+            <wrapped-flat-pickr
+              label="Select date (wrapped v-model as an array and kept as an array)"
+              v-model="form.dateAsArray"
+              @input="test"
+              :config="configs.basic"
+            />
 
             <div class="form-group">
               <label>Select date (basic)</label>
@@ -188,6 +202,7 @@
   import flatpickr from "flatpickr";
   // Init component
   import flatPickrComponent from '../src/index.js';
+  import WrappedFlatPickr from './WrappedFlatPickr.vue';
   // Need to add base css for flatpickr
   import 'flatpickr/dist/flatpickr.min.css';
   // l10n is optional
@@ -212,6 +227,9 @@
 
   export default {
     name: 'app',
+    components: {
+      WrappedFlatPickr
+    },
     data() {
       return {
         inputDisabled: false,
@@ -219,6 +237,7 @@
           dateBasic: null,
           dateTime: null,
           time: null,
+          dateAsArray: ['2017-01-01'],
           date: '2017-01-01',
           dateLocale: null,
           dateInline: +new Date(),
@@ -312,6 +331,9 @@
       },
       onEndChange(selectedDates, dateStr, instance) {
         this.$set(this.configs.start, 'maxDate', dateStr);
+      },
+      test(payload) {
+        console.log('test', payload)
       }
     },
     mounted() {

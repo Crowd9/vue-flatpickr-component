@@ -174,12 +174,20 @@ export default {
      *
      * @param newValue
      */
-    value(newValue) {
+    value(newValue, prevValue) {
       // Prevent updates if v-model value is same as input's current value
-      if (newValue === this.$el.value) return;
+      // [1]
+      if (JSON.stringify(newValue) === JSON.stringify(prevValue)) return;
+      // [2]
+      // if (newValue === this.$el.value) return;
+
       // Make sure we have a flatpickr instance
       this.fp &&
       // Notify flatpickr instance that there is a change in value
+
+      // seeting this to true (emit events) will cause infinite loop on parent
+      // components wrapping and manually binding events. unless you do #1. If you do
+      // #2 you have to set this to false
       this.fp.setDate(newValue, true);
     },
   },
